@@ -138,7 +138,7 @@ final class PitchDetector: ObservableObject {
             }
         }
 
-        guard tauEstimate > 0 else {
+        if tauEstimate <= 0 {
             // Fall back to global minimum if no threshold crossing found
             var minVal: Float = Float.infinity
             var minIdx = minLag

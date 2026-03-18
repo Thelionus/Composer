@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Part
 
 /// A single instrumental part within a VocalScoreProject.
-struct Part: Identifiable, Codable {
+struct Part: Identifiable, Codable, Hashable {
     var id: UUID
     var name: String
     var instrument: Instrument

@@ -258,7 +258,7 @@ struct ProjectRowView: View {
 
             Text(dateFormatter.localizedString(for: project.modifiedAt, relativeTo: Date()))
                 .font(.caption2)
-                .foregroundColor(.tertiary)
+                .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 4)
     }

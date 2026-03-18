@@ -147,7 +147,7 @@ struct NoteStrip: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
                 ForEach(notes.prefix(maxVisible)) { note in
-                    NoteView(note: note, compact: true, onTap: { onTap?(note.id) })
+                    NoteView(note: note, onTap: { onTap?(note.id) }, compact: true)
                 }
 
                 if notes.count > maxVisible {

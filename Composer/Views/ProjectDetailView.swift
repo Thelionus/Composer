@@ -292,7 +292,7 @@ struct ProjectDetailView: View {
                 }
             }
         }
-        .presentationDetents([.small])
+        .presentationDetents([.height(220)])
     }
 
     // MARK: - Actions
