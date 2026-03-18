@@ -42,7 +42,7 @@ final class PitchDetector: ObservableObject {
         guard !isRunning else { return }
 
         let inputNode = engine.inputNode
-        let format = AVAudioFormat(standardFormatWithSampleRate: Double(sampleRate), channels: 1)!
+        let format = inputNode.outputFormat(forBus: 0)
 
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: format) { [weak self] buffer, _ in
             guard let self else { return }
