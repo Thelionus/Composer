@@ -41,19 +41,33 @@ final class PitchDetector: ObservableObject {
     func startDetection() {
         guard !isRunning else { return }
 
+        // Step 1 — configure AVAudioSession for recording FIRST
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try session.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("[PitchDetector] Failed to configure audio session: \(error)")
+            return
+        }
+
+        // Step 2 — get the hardware native format (after session is active)
         let inputNode = engine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
 
+        // Step 3 — install tap using hardware format
         inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: format) { [weak self] buffer, _ in
             guard let self else { return }
             self.analyzeBuffer(buffer)
         }
 
+        // Step 4 — start engine
         do {
             try engine.start()
             isRunning = true
         } catch {
             print("[PitchDetector] Failed to start engine: \(error)")
+            engine.inputNode.removeTap(onBus: 0)
         }
     }
 
@@ -62,6 +76,9 @@ final class PitchDetector: ObservableObject {
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
         isRunning = false
+
+        // Deactivate audio session
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
 
         currentPitch = 0
         currentMIDINote = 0
